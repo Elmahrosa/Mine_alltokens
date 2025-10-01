@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪙 TEOS Egypt Mining Portal | Become a Verified Pioneer 🇪🇬</title>
+    <meta name="description" content="A civic-powered mining app for TEOS Egypt. Contributors unlock daily token rewards by completing civic steps and can upgrade to Basic or Pro tiers.">
+    <meta name="keywords" content="TEOS, Egypt, mining, crypto, tokens, civic, pioneer, blockchain">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="TEOS Egypt Mining Portal">
+    <meta property="og:description" content="Become a Verified TEOS Pioneer 🇪🇬">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mine.teosegypt.com">
+    <meta property="og:site_name" content="TEOS Egypt">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loader">
+            <div class="egypt-flag-loader"></div>
+            <h2>🪙 TEOS Egypt Mining Portal</h2>
+            <p>Loading your pioneer journey...</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="assets/teos-logo.png" alt="TEOS Egypt" class="logo-img">
+                    <h1>🪙 Mine_alltokens</h1>
+                </div>
+                <nav class="nav">
+                    <div id="user-info" class="user-info" style="display: none;">
+                        <span id="user-email"></span>
+                        <span id="user-tier" class="tier-badge"></span>
+                        <button id="logout-btn" class="btn-secondary">Logout</button>
+                    </div>
+                    <div id="auth-buttons" class="auth-buttons">
+                        <button id="login-btn" class="btn-secondary">Login</button>
+                        <button id="signup-btn" class="btn-primary">Sign Up</button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        🇪🇬 Become a Verified TEOS Pioneer
+                    </h1>
+                    <p class="hero-subtitle">
+                        A civic-powered mining app for TEOS Egypt. Contributors unlock daily token rewards by completing civic steps and can upgrade to Basic or Pro tiers.
+                    </p>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-number" id="total-users">0</span>
+                            <span class="stat-label">Verified Pioneers</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="total-mined">0</span>
+                            <span class="stat-label">TEOS Mined</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="total-referrals">0</span>
+                            <span class="stat-label">Active Referrals</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Auth Modal -->
+        <div id="auth-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" id="close-auth-modal">&times;</span>
+                <h2 id="auth-modal-title">Welcome to TEOS Egypt</h2>
+                
+                <form id="auth-form">
+                    <div class="form-group">
+                        <input type="email" id="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="password" placeholder="Password" required>
+                    </div>
+                    <div class="form-group" id="referral-group" style="display: none;">
+                        <input type="text" id="referral-code" placeholder="Referral Code (Optional)">
+                    </div>
+                    <button type="submit" id="auth-submit" class="btn-primary">Sign In</button>
+                </form>
+                
+                <p class="auth-switch">
+                    <span id="auth-switch-text">Don't have an account?</span>
+                    <a href="#" id="auth-switch-link">Sign up here</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Civic Verification Section -->
+        <section id="civic-section" class="civic-section" style="display: none;">
+            <div class="container">
+                <h2 class="section-title">🇪🇬 Complete Your Civic Verification</h2>
+                <p class="section-subtitle">Before mining, you must complete these civic steps to become a verified TEOS pioneer:</p>
+                
+                <div class="civic-steps">
+                    <div class="civic-step" data-step="petition_signed">
+                        <div class="step-icon">📝</div>
+                        <div class="step-content">
+                            <h3>Sign the TEOS Petition</h3>
+                            <p>Join the movement to regulate digital currencies in Egypt</p>
+                            <a href="https://www.change.org/p/join-the-movement-sign-the-petition-to-regulate-digital-currencies-in-egypt" target="_blank" class="btn-primary">Sign Petition</a>
+                            <button class="verify-btn" data-step="petition_signed">✅ I've Completed This</button>
+                        </div>
+                        <div class="step-status"></div>
+                    </div>
+                    
+                    <div class="civic-step" data-step="telegram_joined">
+                        <div class="step-icon">💬</div>
+                        <div class="step-content">
+                            <h3>Join our Telegram</h3>
+                            <p>Connect with the TEOS Egypt community</p>
+                            <a href="https://t.me/Elmahrosapi" target="_blank" class="btn-primary">Join Telegram</a>
+                            <button class="verify-btn" data-step="telegram_joined">✅ I've Completed This</button>
+                        </div>
+                        <div class="step-status"></div>
+                    </div>
+                    
+                    <div class="civic-step" data-step="facebook_followed">
+                        <div class="step-icon">👍</div>
+                        <div class="step-content">
+                            <h3>Follow us on Facebook</h3>
+                            <p>Stay updated with our latest news</p>
+                            <a href="https://www.facebook.com/teosegypt" target="_blank" class="btn-primary">Follow Facebook</a>
+                            <button class="verify-btn" data-step="facebook_followed">✅ I've Completed This</button>
+                        </div>
+                        <div class="step-status"></div>
+                    </div>
+                    
+                    <div class="civic-step" data-step="x_followed">
+                        <div class="step-icon">🐦</div>
+                        <div class="step-content">
+                            <h3>Follow us on X</h3>
+                            <p>Join the conversation on X (Twitter)</p>
+                            <a href="https://x.com/king_teos" target="_blank" class="btn-primary">Follow X</a>
+                            <button class="verify-btn" data-step="x_followed">✅ I've Completed This</button>
+                        </div>
+                        <div class="step-status"></div>
+                    </div>
+                </div>
+                
+                <div id="civic-complete" class="civic-complete" style="display: none;">
+                    <div class="success-badge">
+                        <span class="success-icon">🎉</span>
+                        <h3>Congratulations!</h3>
+                        <p>You are now a Verified TEOS Pioneer! You can start mining tokens.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mining Dashboard -->
+        <section id="mining-section" class="mining-section" style="display: none;">
+            <div class="container">
+                <h2 class="section-title">⛏️ Mining Dashboard</h2>
+                
+                <!-- Mining Stats -->
+                <div class="mining-stats">
+                    <div class="stat-card">
+                        <h3>🪙 TEOS Balance</h3>
+                        <span class="balance" id="teos-balance">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>👑 TUT Balance</h3>
+                        <span class="balance" id="tut-balance">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🇪🇬 ERT Balance</h3>
+                        <span class="balance" id="ert-balance">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>⏰ Next Mine</h3>
+                        <span class="balance" id="next-mine-time">Ready!</span>
+                    </div>
+                </div>
+                
+                <!-- Mining Button -->
+                <div class="mining-control">
+                    <button id="mine-btn" class="mine-btn" disabled>
+                        <span class="mine-icon">⛏️</span>
+                        <span class="mine-text">Mine Tokens</span>
+                    </button>
+                    <div class="mining-rewards">
+                        <h4>Daily Mining Rewards (Your Tier: <span id="current-tier">Free</span>)</h4>
+                        <div class="rewards-display">
+                            <span class="reward">🪙 <span id="teos-reward">12</span> TEOS</span>
+                            <span class="reward">👑 <span id="tut-reward">6</span> TUT</span>
+                            <span class="reward">🇪🇬 <span id="ert-reward">3</span> ERT</span>
+                        </div>
+                        <p class="reward-note">Mining resets every 24 hours • Referral bonus: +5%</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tier Upgrade Section -->
+        <section id="upgrade-section" class="upgrade-section">
+            <div class="container">
+                <h2 class="section-title">💎 Upgrade Your Tier</h2>
+                <p class="section-subtitle">Upgrade to unlock faster mining, badges, and premium campaigns</p>
+                
+                <div class="tier-cards">
+                    <div class="tier-card" data-tier="free">
+                        <div class="tier-header">
+                            <h3>🌱 Free</h3>
+                            <div class="tier-price">$0/month</div>
+                        </div>
+                        <div class="tier-features">
+                            <div class="tier-rewards">
+                                <span>🪙 12 TEOS</span>
+                                <span>👑 6 TUT</span>
+                                <span>🇪🇬 3 ERT</span>
+                            </div>
+                            <ul>
+                                <li>✅ Basic mining</li>
+                                <li>✅ Referral bonuses</li>
+                                <li>✅ Community access</li>
+                            </ul>
+                        </div>
+                        <button class="tier-btn current-tier">Current Tier</button>
+                    </div>
+                    
+                    <div class="tier-card featured" data-tier="basic">
+                        <div class="tier-header">
+                            <h3>🔓 Basic</h3>
+                            <div class="tier-price">$5/month</div>
+                        </div>
+                        <div class="tier-features">
+                            <div class="tier-rewards">
+                                <span>🪙 24 TEOS</span>
+                                <span>👑 12 TUT</span>
+                                <span>🇪🇬 6 ERT</span>
+                            </div>
+                            <ul>
+                                <li>✅ 2x mining rewards</li>
+                                <li>✅ Priority support</li>
+                                <li>✅ Exclusive campaigns</li>
+                                <li>✅ Basic tier badge</li>
+                            </ul>
+                        </div>
+                        <button class="tier-btn upgrade-btn" data-tier="basic">Upgrade to Basic</button>
+                    </div>
+                    
+                    <div class="tier-card" data-tier="pro">
+                        <div class="tier-header">
+                            <h3>🔱 Pro</h3>
+                            <div class="tier-price">$10/month</div>
+                        </div>
+                        <div class="tier-features">
+                            <div class="tier-rewards">
+                                <span>🪙 36 TEOS</span>
+                                <span>👑 18 TUT</span>
+                                <span>🇪🇬 9 ERT</span>
+                            </div>
+                            <ul>
+                                <li>✅ 3x mining rewards</li>
+                                <li>✅ VIP support</li>
+                                <li>✅ Premium campaigns</li>
+                                <li>✅ Pro tier badge</li>
+                                <li>✅ Advanced analytics</li>
+                            </ul>
+                        </div>
+                        <button class="tier-btn upgrade-btn" data-tier="pro">Upgrade to Pro</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment Modal -->
+        <div id="payment-modal" class="modal" style="display: none;">
+            <div class="modal-content payment-modal">
+                <span class="close" id="close-payment-modal">&times;</span>
+                <h2>💰 Upgrade Payment</h2>
+                <p>Choose your payment method and submit transaction details:</p>
+                
+                <div class="payment-methods">
+                    <div class="payment-method" data-method="solana">
+                        <h3>Solana / TEOS / USDT</h3>
+                        <div class="wallet-address">
+                            <label>Wallet Address:</label>
+                            <input type="text" value="F1YLmukcxAyZj6zVpi2XaVctmYnuZQB5uHpd3uUpXxr6" readonly>
+                            <button class="copy-btn" data-copy="F1YLmukcxAyZj6zVpi2XaVctmYnuZQB5uHpd3uUpXxr6">Copy</button>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-method" data-method="pi">
+                        <h3>Pi Network</h3>
+                        <div class="wallet-address">
+                            <label>Pi Wallet:</label>
+                            <input type="text" value="GDIW2DXDR3DU4CYTRHDS3WYDGHMUQZG7E5FJWWW6XSADOC5VHMYRYD6F" readonly>
+                            <button class="copy-btn" data-copy="GDIW2DXDR3DU4CYTRHDS3WYDGHMUQZG7E5FJWWW6XSADOC5VHMYRYD6F">Copy</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <form id="payment-form">
+                    <div class="form-group">
+                        <label>Selected Tier:</label>
+                        <input type="text" id="payment-tier" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount (USD):</label>
+                        <input type="text" id="payment-amount" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Currency:</label>
+                        <select id="payment-currency" required>
+                            <option value="">Select Currency</option>
+                            <option value="SOL">SOL</option>
+                            <option value="TEOS">TEOS</option>
+                            <option value="USDT">USDT</option>
+                            <option value="Pi">Pi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Transaction Hash:</label>
+                        <input type="text" id="transaction-hash" placeholder="Enter your transaction hash" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Wallet Address (optional):</label>
+                        <input type="text" id="sender-wallet" placeholder="Your wallet address">
+                    </div>
+                    <button type="submit" class="btn-primary">Submit Payment</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Referral Section -->
+        <section id="referral-section" class="referral-section">
+            <div class="container">
+                <h2 class="section-title">🤝 Referral Program</h2>
+                <p class="section-subtitle">Invite friends and earn +5% bonus on their mining rewards!</p>
+                
+                <div class="referral-stats">
+                    <div class="referral-card">
+                        <h3>Your Referral Code</h3>
+                        <div class="referral-code-display">
+                            <input type="text" id="referral-code-display" readonly>
+                            <button class="copy-btn" id="copy-referral-code">Copy</button>
+                        </div>
+                    </div>
+                    
+                    <div class="referral-card">
+                        <h3>Referral Link</h3>
+                        <div class="referral-code-display">
+                            <input type="text" id="referral-link-display" readonly>
+                            <button class="copy-btn" id="copy-referral-link">Copy</button>
+                        </div>
+                    </div>
+                    
+                    <div class="referral-card">
+                        <h3>Total Referrals</h3>
+                        <div class="referral-stat">
+                            <span class="stat-number" id="total-referrals-display">0</span>
+                            <span class="stat-label">Active Referrals</span>
+                        </div>
+                    </div>
+                    
+                    <div class="referral-card">
+                        <h3>Bonus Earned</h3>
+                        <div class="referral-stat">
+                            <span class="stat-number" id="referral-bonus-earned">0</span>
+                            <span class="stat-label">TEOS Bonus</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mining History -->
+        <section id="history-section" class="history-section" style="display: none;">
+            <div class="container">
+                <h2 class="section-title">📊 Mining History</h2>
+                <div class="history-table">
+                    <table id="mining-history-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Token</th>
+                                <th>Amount</th>
+                                <th>Tier</th>
+                                <th>Bonus</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mining-history-body">
+                            <!-- History entries will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>🇪🇬 TEOS Egypt</h3>
+                    <p>Become a Verified TEOS Pioneer</p>
+                    <div class="social-links">
+                        <a href="https://t.me/Elmahrosapi" target="_blank">Telegram</a>
+                        <a href="https://www.facebook.com/teosegypt" target="_blank">Facebook</a>
+                        <a href="https://x.com/king_teos" target="_blank">X (Twitter)</a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Mining Portal</h4>
+                    <ul>
+                        <li><a href="#civic-section">Civic Verification</a></li>
+                        <li><a href="#mining-section">Mining Dashboard</a></li>
+                        <li><a href="#upgrade-section">Tier Upgrades</a></li>
+                        <li><a href="#referral-section">Referrals</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="mailto:support@teosegypt.com">Email Support</a></li>
+                        <li><a href="https://t.me/Elmahrosapi">Telegram Support</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 TEOS Egypt. Open-source for civic use. Fork, remix, and deploy for your own sovereign campaigns.</p>
+                <p>🌍 <strong>Join the Movement</strong> - This portal is part of TEOS Egypt's global digital legacy. Every miner, referrer, and contributor becomes part of the myth.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="mining.js"></script>
+    <script src="upgrade.js"></script>
+    <script src="referral.js"></script>
+    <script>
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loading screen after 2 seconds
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.display = 'none';
+            }, 2000);
+            
+            // Initialize mining app
+            if (typeof MiningApp !== 'undefined') {
+                MiningApp.init();
+            }
+            
+            // Initialize upgrade system
+            if (typeof UpgradeSystem !== 'undefined') {
+                UpgradeSystem.init();
+            }
+            
+            // Initialize referral system
+            if (typeof ReferralSystem !== 'undefined') {
+                ReferralSystem.init();
+            }
+        });
+    </script>
+</body>
+</html>
