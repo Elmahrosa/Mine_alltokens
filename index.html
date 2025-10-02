@@ -1,30 +1,674 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🪙 TEOS Egypt Mining Portal | Become a Verified Pioneer 🇪🇬</title>
     <meta name="description" content="A civic-powered mining app for TEOS Egypt. Contributors unlock daily token rewards by completing civic steps and can upgrade to Basic or Pro tiers.">
-    <meta name="keywords" content="TEOS, Egypt, mining, crypto, tokens, civic, pioneer, blockchain">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="TEOS Egypt Mining Portal">
-    <meta property="og:description" content="Become a Verified TEOS Pioneer 🇪🇬">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://mine.teosegypt.com">
-    <meta property="og:site_name" content="TEOS Egypt">
-    
-    <!-- Favicon -->
-    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
     
-    <!-- Styles -->
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #ffd700;
+            --secondary-color: #ff6b6b;
+            --dark-bg: #0d0d0d;
+            --card-bg: #1a1a1a;
+            --text-light: #f5f5f5;
+            --text-muted: #999;
+            --success: #4caf50;
+            --error: #f44336;
+            --info: #2196f3;
+            --warning: #ff9800;
+            --border-color: #333;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+            color: var(--text-light);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+
+        .loader {
+            text-align: center;
+        }
+
+        .egypt-flag-loader {
+            width: 60px;
+            height: 40px;
+            background: linear-gradient(to bottom, #ce1126 33%, white 33%, white 66%, black 66%);
+            margin: 0 auto 20px;
+            border-radius: 4px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* Header */
+        .header {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .tier-badge {
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Buttons */
+        .btn-primary, .btn-secondary {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--dark-bg);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-light);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .stat {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        /* Civic Steps */
+        .civic-steps {
+            display: grid;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .civic-step {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+        }
+
+        .civic-step:hover {
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .step-icon {
+            font-size: 2rem;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h3 {
+            margin-bottom: 5px;
+        }
+
+        .verify-btn {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .verify-btn.verified {
+            background: var(--text-muted);
+            cursor: default;
+        }
+
+        .civic-complete {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(255, 215, 0, 0.1));
+            border-radius: 12px;
+            margin-top: 30px;
+            border: 2px solid var(--success);
+        }
+
+        /* Mining Dashboard */
+        .mining-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            margin-bottom: 10px;
+            color: var(--text-muted);
+        }
+
+        .balance {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .mining-control {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .mine-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), #ff6b6b);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .mine-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .mine-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Tier Cards */
+        .tier-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .tier-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tier-card.featured {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .tier-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .tier-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .tier-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .tier-price {
+            font-size: 2rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .tier-features {
+            margin-bottom: 25px;
+        }
+
+        .tier-rewards {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .tier-rewards span {
+            font-weight: 600;
+        }
+
+        .tier-features ul {
+            list-style: none;
+        }
+
+        .tier-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tier-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .current-tier {
+            background: var(--success);
+            color: white;
+        }
+
+        .upgrade-btn {
+            background: var(--primary-color);
+            color: var(--dark-bg);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .close:hover {
+            color: var(--primary-color);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        /* Wallet Address */
+        .wallet-address {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .wallet-address input {
+            flex: 1;
+        }
+
+        .copy-btn {
+            padding: 8px 12px;
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Referral Section */
+        .referral-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .referral-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .referral-code-display {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .referral-code-display input {
+            flex: 1;
+            padding: 10px;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-light);
+        }
+
+        .referral-stat {
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--card-bg);
+            padding: 40px 0 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3,
+        .footer-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            padding: 5px 0;
+        }
+
+        .footer-section a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .toast {
+            background: var(--card-bg);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--primary-color); /* Default color */
+            color: var(--text-light);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease-out forwards;
+            opacity: 0;
+        }
+        .toast.success { border-left-color: var(--success); }
+        .toast.error { border-left-color: var(--error); }
+        .toast.info { border-left-color: var(--info); }
+        .toast.warning { border-left-color: var(--warning); }
+
+        @keyframes slideIn {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .tier-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .tier-card.featured {
+                transform: scale(1);
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -41,13 +685,12 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <img src="assets/teos-logo.png" alt="TEOS Egypt" class="logo-img">
-                    <h1>🪙 Mine_alltokens</h1>
+                    <h1>🪙 TEOS Egypt</h1>
                 </div>
                 <nav class="nav">
                     <div id="user-info" class="user-info" style="display: none;">
                         <span id="user-email"></span>
-                        <span id="user-tier" class="tier-badge"></span>
+                        <span id="user-tier" class="tier-badge">Free</span>
                         <button id="logout-btn" class="btn-secondary">Logout</button>
                     </div>
                     <div id="auth-buttons" class="auth-buttons">
@@ -90,7 +733,7 @@
         </section>
 
         <!-- Auth Modal -->
-        <div id="auth-modal" class="modal" style="display: none;">
+        <div id="auth-modal" class="modal">
             <div class="modal-content">
                 <span class="close" id="close-auth-modal">&times;</span>
                 <h2 id="auth-modal-title">Welcome to TEOS Egypt</h2>
@@ -116,7 +759,7 @@
         </div>
 
         <!-- Civic Verification Section -->
-        <section id="civic-section" class="civic-section" style="display: none;">
+        <section id="civic-section" class="civic-section">
             <div class="container">
                 <h2 class="section-title">🇪🇬 Complete Your Civic Verification</h2>
                 <p class="section-subtitle">Before mining, you must complete these civic steps to become a verified TEOS pioneer:</p>
@@ -231,7 +874,7 @@
                     <div class="tier-card" data-tier="free">
                         <div class="tier-header">
                             <h3>🌱 Free</h3>
-                            <div class="tier-price">$0/month</div>
+                            <div class="tier-price">\$0/month</div>
                         </div>
                         <div class="tier-features">
                             <div class="tier-rewards">
@@ -251,7 +894,7 @@
                     <div class="tier-card featured" data-tier="basic">
                         <div class="tier-header">
                             <h3>🔓 Basic</h3>
-                            <div class="tier-price">$5/month</div>
+                            <div class="tier-price">\$5/month</div>
                         </div>
                         <div class="tier-features">
                             <div class="tier-rewards">
@@ -272,7 +915,7 @@
                     <div class="tier-card" data-tier="pro">
                         <div class="tier-header">
                             <h3>🔱 Pro</h3>
-                            <div class="tier-price">$10/month</div>
+                            <div class="tier-price">\$10/month</div>
                         </div>
                         <div class="tier-features">
                             <div class="tier-rewards">
@@ -295,7 +938,7 @@
         </section>
 
         <!-- Payment Modal -->
-        <div id="payment-modal" class="modal" style="display: none;">
+        <div id="payment-modal" class="modal">
             <div class="modal-content payment-modal">
                 <span class="close" id="close-payment-modal">&times;</span>
                 <h2>💰 Upgrade Payment</h2>
@@ -387,33 +1030,10 @@
                     <div class="referral-card">
                         <h3>Bonus Earned</h3>
                         <div class="referral-stat">
-                            <span class="stat-number" id="referral-bonus-earned">0</span>
+                            <span class="stat-number" id="referral-bonus-earned">0.00</span>
                             <span class="stat-label">TEOS Bonus</span>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Mining History -->
-        <section id="history-section" class="history-section" style="display: none;">
-            <div class="container">
-                <h2 class="section-title">📊 Mining History</h2>
-                <div class="history-table">
-                    <table id="mining-history-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Token</th>
-                                <th>Amount</th>
-                                <th>Tier</th>
-                                <th>Bonus</th>
-                            </tr>
-                        </thead>
-                        <tbody id="mining-history-body">
-                            <!-- History entries will be populated here -->
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </section>
@@ -456,7 +1076,7 @@
             
             <div class="footer-bottom">
                 <p>&copy; 2025 TEOS Egypt. Open-source for civic use. Fork, remix, and deploy for your own sovereign campaigns.</p>
-                <p>🌍 <strong>Join the Movement</strong> - This portal is part of TEOS Egypt's global digital legacy. Every miner, referrer, and contributor becomes part of the myth.</p>
+                <p>🌍 <strong>Join the Movement</strong> - This portal is part of TEOS Egypt's global digital legacy.</p>
             </div>
         </div>
     </footer>
@@ -464,33 +1084,627 @@
     <!-- Toast Notifications -->
     <div id="toast-container" class="toast-container"></div>
 
-    <!-- Scripts -->
-    <script src="mining.js"></script>
-    <script src="upgrade.js"></script>
-    <script src="referral.js"></script>
     <script>
-        // Initialize app when DOM is loaded
+        // --- App State ---
+        const app = {
+            user: null, // Stores user object like { email: 'user@example.com' }
+            tier: 'free', // Default tier: 'free', 'basic', 'pro'
+            balances: {
+                teos: 0,
+                tut: 0,
+                ert: 0
+            },
+            civicSteps: { // Tracks completion of civic verification steps
+                petition_signed: false,
+                telegram_joined: false,
+                facebook_followed: false,
+                x_followed: false
+            },
+            lastMine: null, // Timestamp of the last successful mining operation
+            referralCode: null, // The user's unique referral code
+            referrals: 0, // Number of people this user has successfully referred
+            referralBonusEarned: 0 // Total bonus tokens earned from referrals
+        };
+
+        // --- Tier Configurations ---
+        const tierConfig = {
+            free: { name: 'Free', price: 0, teos: 12, tut: 6, ert: 3 },
+            basic: { name: 'Basic', price: 5, teos: 24, tut: 12, ert: 6 },
+            pro: { name: 'Pro', price: 10, teos: 36, tut: 18, ert: 9 }
+        };
+
+        // --- DOM Element References ---
+        const loadingScreen = document.getElementById('loading-screen');
+        const loginBtn = document.getElementById('login-btn');
+        const signupBtn = document.getElementById('signup-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userInfoDiv = document.getElementById('user-info');
+        const authButtonsDiv = document.getElementById('auth-buttons');
+        const userEmailSpan = document.getElementById('user-email');
+        const userTierBadge = document.getElementById('user-tier');
+        const authModal = document.getElementById('auth-modal');
+        const authForm = document.getElementById('auth-form');
+        const authModalTitle = document.getElementById('auth-modal-title');
+        const authSubmitBtn = document.getElementById('auth-submit');
+        const authSwitchText = document.getElementById('auth-switch-text');
+        const authSwitchLink = document.getElementById('auth-switch-link');
+        const referralGroup = document.getElementById('referral-group');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const referralCodeInput = document.getElementById('referral-code');
+        const civicSection = document.getElementById('civic-section');
+        const civicCompleteDiv = document.getElementById('civic-complete');
+        const miningSection = document.getElementById('mining-section');
+        const mineBtn = document.getElementById('mine-btn');
+        const teosBalanceSpan = document.getElementById('teos-balance');
+        const tutBalanceSpan = document.getElementById('tut-balance');
+        const ertBalanceSpan = document.getElementById('ert-balance');
+        const nextMineTimeSpan = document.getElementById('next-mine-time');
+        const currentTierSpan = document.getElementById('current-tier');
+        const teosRewardSpan = document.getElementById('teos-reward');
+        const tutRewardSpan = document.getElementById('tut-reward');
+        const ertRewardSpan = document.getElementById('ert-reward');
+        const upgradeSection = document.getElementById('upgrade-section');
+        const paymentModal = document.getElementById('payment-modal');
+        const paymentTierInput = document.getElementById('payment-tier');
+        const paymentAmountInput = document.getElementById('payment-amount');
+        const paymentForm = document.getElementById('payment-form');
+        const referralSection = document.getElementById('referral-section');
+        const referralCodeDisplayInput = document.getElementById('referral-code-display');
+        const referralLinkDisplayInput = document.getElementById('referral-link-display');
+        const totalReferralsDisplaySpan = document.getElementById('total-referrals-display');
+        const referralBonusEarnedSpan = document.getElementById('referral-bonus-earned');
+        const toastContainer = document.getElementById('toast-container');
+
+        // --- Initialization ---
         document.addEventListener('DOMContentLoaded', function() {
-            // Hide loading screen after 2 seconds
+            // Hide loading screen after a short delay
             setTimeout(() => {
-                document.getElementById('loading-screen').style.display = 'none';
-            }, 2000);
+                loadingScreen.style.display = 'none';
+            }, 1500);
+
+            // Load user data from localStorage
+            loadUserData();
             
-            // Initialize mining app
-            if (typeof MiningApp !== 'undefined') {
-                MiningApp.init();
+            // Initialize event listeners
+            initEventListeners();
+            
+            // Generate referral code if not already set (e.g., from URL or previous session)
+            if (!app.referralCode) {
+                app.referralCode = generateReferralCode();
             }
             
-            // Initialize upgrade system
-            if (typeof UpgradeSystem !== 'undefined') {
-                UpgradeSystem.init();
-            }
+            // Update UI based on loaded state
+            updateUI();
             
-            // Initialize referral system
-            if (typeof ReferralSystem !== 'undefined') {
-                ReferralSystem.init();
-            }
+            // Check URL for referral code on initial load
+            checkReferralFromURL();
+            
+            // Animate stats on hero section (optional)
+            animateHeroStats();
+
+            // Set initial reward display based on default tier
+            updateRewardDisplay();
+
+            // Initialize mining button state (checks cooldown, verification, etc.)
+            updateMiningButtonState();
         });
+
+        // --- Event Listeners Setup ---
+        function initEventListeners() {
+            // Header buttons
+            loginBtn.addEventListener('click', () => showAuthModal('login'));
+            signupBtn.addEventListener('click', () => showAuthModal('signup'));
+            logoutBtn.addEventListener('click', logout);
+            
+            // Auth modal controls
+            document.getElementById('close-auth-modal').addEventListener('click', () => closeModal('auth-modal'));
+            authForm.addEventListener('submit', handleAuth);
+            authSwitchLink.addEventListener('click', switchAuthMode);
+            
+            // Civic verification buttons
+            document.querySelectorAll('.verify-btn').forEach(btn => {
+                btn.addEventListener('click', handleCivicVerification);
+            });
+            
+            // Mining button
+            mineBtn.addEventListener('click', mineTokens);
+            
+            // Tier upgrade buttons
+            document.querySelectorAll('.upgrade-btn').forEach(btn => {
+                btn.addEventListener('click', showPaymentModal);
+            });
+            
+            // Payment modal controls
+            document.getElementById('close-payment-modal').addEventListener('click', () => closeModal('payment-modal'));
+            paymentForm.addEventListener('submit', handlePayment);
+            
+            // General copy buttons (e.g., in payment modal)
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', handleCopy);
+            });
+            
+            // Specific referral copy buttons
+            document.getElementById('copy-referral-code').addEventListener('click', () => copyToClipboard(app.referralCode));
+            document.getElementById('copy-referral-link').addEventListener('click', () => copyToClipboard(window.location.origin + '?ref=' + app.referralCode));
+        }
+
+        // --- Local Storage for Data Persistence ---
+        function saveUserData() {
+            // Save the current state of the app to localStorage
+            localStorage.setItem('teosEgyptAppData', JSON.stringify(app));
+        }
+
+        function loadUserData() {
+            // Load data from localStorage
+            const savedData = localStorage.getItem('teosEgyptAppData');
+            if (savedData) {
+                const loadedApp = JSON.parse(savedData);
+                // Merge loaded data into the current app state, ensuring all properties exist
+                Object.assign(app, loadedApp);
+                
+                // Ensure nested objects and properties are correctly loaded or reset to defaults if missing
+                app.civicSteps = loadedApp.civicSteps || { petition_signed: false, telegram_joined: false, facebook_followed: false, x_followed: false };
+                app.balances = loadedApp.balances || { teos: 0, tut: 0, ert: 0 };
+                app.lastMine = loadedApp.lastMine || null;
+                app.referralCode = loadedApp.referralCode || null;
+                app.referrals = loadedApp.referrals || 0;
+                app.referralBonusEarned = loadedApp.referralBonusEarned || 0;
+                
+                // Ensure tier is set, default to 'free' if not found
+                if (!app.tier || !tierConfig[app.tier]) {
+                    app.tier = 'free';
+                }
+            }
+        }
+
+        // --- Authentication Flow ---
+        function showAuthModal(mode) {
+            authModal.style.display = 'flex'; // Use flex to center the modal content
+            
+            if (mode === 'signup') {
+                authModalTitle.textContent = 'Create Your Account';
+                authSubmitBtn.textContent = 'Sign Up';
+                authSwitchText.textContent = 'Already have an account?';
+                authSwitchLink.textContent = 'Sign in here';
+                referralGroup.style.display = 'block'; // Show referral input for signup
+                referralCodeInput.required = false; // Referral is optional
+            } else { // login mode
+                authModalTitle.textContent = 'Welcome Back';
+                authSubmitBtn.textContent = 'Sign In';
+                authSwitchText.textContent = "Don't have an account?";
+                authSwitchLink.textContent = 'Sign up here';
+                referralGroup.style.display = 'none'; // Hide referral input for login
+                referralCodeInput.required = false;
+            }
+        }
+
+        function switchAuthMode(e) {
+            e.preventDefault();
+            // Toggle between login and signup views in the modal
+            const isLoginView = authSubmitBtn.textContent === 'Sign In';
+            showAuthModal(isLoginView ? 'signup' : 'login');
+        }
+
+        function handleAuth(e) {
+            e.preventDefault();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            const referralCodeFromInput = referralCodeInput.value.trim(); // Referral code entered during signup
+            
+            if (!email || !password) {
+                showToast('Please fill in both email and password.', 'error');
+                return;
+            }
+
+            // --- Simulate Authentication/Registration ---
+            // In a real application, this logic would interact with a backend API.
+            
+            if (authSubmitBtn.textContent === 'Sign In') {
+                // --- Sign In Logic ---
+                app.user = { email: email }; // Simulate successful login
+                showToast(`Welcome back, ${email}!`, 'success');
+                
+                // If a referral code was provided during *signup*, it would have been processed then.
+                // No specific action needed here for login based on referral code input.
+
+            } else { // Sign Up
+                // --- Sign Up Logic ---
+                app.user = { email: email }; // Simulate successful registration
+
+                // If a referral code was provided during signup:
+                if (referralCodeFromInput) {
+                    // This simulates the user being referred by someone.
+                    // In a real backend, you'd link this user to the referrer and credit the referrer.
+                    // For this frontend demo, we just acknowledge it.
+                    showToast(`Account created. You were referred by code: ${referralCodeFromInput}.`, 'info');
+                    // Note: This does NOT increment `app.referrals` for the *current user* as they haven't referred anyone yet.
+                    // The `app.referralCode` is *this user's* code to give out.
+                }
+                
+                // Ensure a referral code is generated for this new user if they don't have one already
+                if (!app.referralCode) {
+                    app.referralCode = generateReferralCode();
+                }
+
+                showToast(`Account created for ${email}!`, 'success');
+            }
+            
+            saveUserData(); // Save the updated app state
+            updateUI();   // Refresh the UI to reflect login status
+            closeModal('auth-modal'); // Close the authentication modal
+            authForm.reset(); // Clear the form fields
+        }
+
+        function logout() {
+            // Reset user-specific data to logged-out state
+            app.user = null;
+            app.tier = 'free'; // Reset tier to default on logout for demo simplicity
+            app.balances = { teos: 0, tut: 0, ert: 0 };
+            app.civicSteps = { petition_signed: false, telegram_joined: false, facebook_followed: false, x_followed: false };
+            app.lastMine = null;
+            // Optionally reset referral stats on logout, or keep them for potential re-login.
+            // For this demo, let's keep referral code but reset count and bonus earned.
+            app.referrals = 0;
+            app.referralBonusEarned = 0;
+            
+            saveUserData(); // Save the reset state
+            updateUI();   // Refresh UI
+            showToast('Logged out successfully', 'info');
+        }
+
+        // --- Civic Verification Logic ---
+        function handleCivicVerification(e) {
+            const step = e.target.dataset.step; // Get the step name from the button's data attribute
+            
+            // Mark the step as complete in the app state
+            app.civicSteps[step] = true;
+            saveUserData(); // Persist the change
+            
+            // Update the button's appearance and state
+            e.target.textContent = '✅ Verified';
+            e.target.disabled = true;
+            e.target.classList.add('verified'); // Add class for potential styling
+            
+            // Check if all civic steps are now completed
+            if (isCivicVerified()) {
+                civicCompleteDiv.style.display = 'block'; // Show completion message
+                showToast('Civic verification complete! You can now mine tokens!', 'success');
+            } else {
+                showToast(`Step "${step.replace('_', ' ')}" completed.`, 'success');
+            }
+            
+            updateUI(); // Refresh UI to potentially enable mining section
+        }
+
+        // --- Mining Functionality ---
+        function mineTokens() {
+            // Ensure user is logged in and verified
+            if (!app.user) {
+                showToast('Please log in to mine tokens.', 'warning');
+                return;
+            }
+            if (!isCivicVerified()) {
+                showToast('Please complete civic verification first.', 'warning');
+                return;
+            }
+
+            const now = Date.now();
+            const twentyFourHoursInMillis = 24 * 60 * 60 * 1000;
+            
+            // Check if the 24-hour cooldown is still active
+            if (app.lastMine && (now - app.lastMine < twentyFourHoursInMillis)) {
+                const timeLeft = twentyFourHoursInMillis - (now - app.lastMine);
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                showToast(`Please wait ${hours}h ${minutes}m before your next mine.`, 'warning');
+                return;
+            }
+            
+            // Calculate rewards based on current tier and referrals
+            const config = tierConfig[app.tier];
+            let baseTeosReward = config.teos;
+            let bonusTeosReward = 0;
+
+            // Apply referral bonus: +5% of base TEOS reward per active referral
+            if (app.referrals > 0) {
+                // Example bonus calculation: 5% per referral, capped at 50% total bonus
+                const bonusPercentage = Math.min(app.referrals * 5, 50); // Max 50% bonus for simplicity
+                bonusTeosReward = Math.floor(baseTeosReward * (bonusPercentage / 100));
+                // Track total bonus earned for display
+                app.referralBonusEarned += bonusTeosReward; 
+            }
+            
+            const totalTeosReward = baseTeosReward + bonusTeosReward;
+
+            // Update balances
+            app.balances.teos += totalTeosReward;
+            app.balances.tut += config.tut;
+            app.balances.ert += config.ert;
+            app.lastMine = now; // Record current time as the last mine time
+            
+            saveUserData(); // Save the updated state
+            updateUI();   // Refresh the UI to show new balances
+            
+            showToast(`Successfully mined ${totalTeosReward} TEOS, ${config.tut} TUT, ${config.ert} ERT!`, 'success');
+            
+            // Update the mining button and its cooldown timer
+            updateMiningButtonState();
+        }
+
+        function updateMiningButtonState() {
+            const now = Date.now();
+            const twentyFourHoursInMillis = 24 * 60 * 60 * 1000;
+            
+            // If not logged in or not verified, mining is disabled
+            if (!app.user || !isCivicVerified()) {
+                mineBtn.disabled = true;
+                mineBtn.textContent = 'Complete Verification to Mine';
+                nextMineTimeSpan.textContent = 'N/A';
+                return;
+            }
+
+            // Check if mining is on cooldown
+            if (app.lastMine && (now - app.lastMine < twentyFourHoursInMillis)) {
+                mineBtn.disabled = true;
+                mineBtn.textContent = 'Mining Available in 24h';
+                updateNextMineCountdown(); // Start the countdown timer
+            } else {
+                // Ready to mine
+                mineBtn.disabled = false;
+                mineBtn.textContent = 'Mine Tokens';
+                nextMineTimeSpan.textContent = 'Ready!';
+            }
+        }
+
+        function updateNextMineCountdown() {
+            // Use an interval to update the countdown every second
+            const interval = setInterval(() => {
+                const now = Date.now();
+                const twentyFourHoursInMillis = 24 * 60 * 60 * 1000;
+                // Calculate remaining time
+                const timeLeft = twentyFourHoursInMillis - (now - app.lastMine);
+
+                if (timeLeft <= 0) {
+                    // Cooldown finished
+                    clearInterval(interval); // Stop the timer
+                    mineBtn.disabled = false;
+                    mineBtn.textContent = 'Mine Tokens';
+                    nextMineTimeSpan.textContent = 'Ready!';
+                    return;
+                }
+                
+                // Format remaining time into hours, minutes, seconds
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                
+                nextMineTimeSpan.textContent = `${hours}h ${minutes}m ${seconds}s`;
+            }, 1000); // Update every second
+        }
+
+        // --- Tier Upgrade Functionality ---
+        function showPaymentModal(e) {
+            const tier = e.target.dataset.tier; // Get the target tier from the button's data attribute
+            const config = tierConfig[tier];
+            
+            // Populate payment modal fields
+            paymentTierInput.value = `${config.name} Tier`;
+            paymentAmountInput.value = `$${config.price}/month`;
+            
+            paymentModal.style.display = 'flex'; // Show the payment modal
+        }
+
+        function handlePayment(e) {
+            e.preventDefault();
+            const selectedTierName = paymentTierInput.value.replace(' Tier', '').toLowerCase(); // Get tier name from input
+            const currency = document.getElementById('payment-currency').value;
+            const transactionHash = document.getElementById('transaction-hash').value.trim();
+            
+            if (!currency || !transactionHash) {
+                showToast('Please select currency and provide transaction hash.', 'error');
+                return;
+            }
+
+            // --- Simulate Payment Processing ---
+            // In a real app, this would involve backend verification of the transaction hash.
+            setTimeout(() => {
+                app.tier = selectedTierName; // Update the user's tier
+                // For demo, reset balances and mining cooldown on tier change
+                app.balances = { teos: 0, tut: 0, ert: 0 }; 
+                app.lastMine = null; 
+                
+                saveUserData(); // Save the updated tier and reset state
+                updateUI();   // Refresh UI
+                closeModal('payment-modal'); // Close the payment modal
+                showToast(`Payment successful! Your tier is now "${tierConfig[app.tier].name}".`, 'success');
+                
+                paymentForm.reset(); // Clear the payment form
+            }, 2000); // Simulate a 2-second processing time
+        }
+
+        // --- Referral System Logic ---
+        function generateReferralCode() {
+            // Generates a simple random alphanumeric code (e.g., "ABC123")
+            return Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+
+        function checkReferralFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const referrerCode = urlParams.get('ref'); // Get referral code from URL query parameter 'ref'
+            
+            if (referrerCode && referrerCode !== app.referralCode) {
+                // If a referral code is found in the URL and it's not the user's own code:
+                referralCodeInput.value = referrerCode; // Pre-fill the referral input in the signup form
+                showToast(`You were referred by code: ${referrerCode}`, 'info');
+                // This code will be used when the user signs up.
+            }
+        }
+
+        // This function is intended to be called when a user *signs up* using a referral code.
+        // It's a placeholder for backend logic that would credit the referrer.
+        function processReferralCodeEntry(code) {
+            if (code && code !== app.referralCode) {
+                // Simulate backend interaction: if user signed up with `code`,
+                // the backend would increment `app.referrals` for the user who owns `code`.
+                // Since we don't have backend access here, this part is conceptual.
+                console.log(`User signed up with referral code: ${code}. Logic to credit referrer would go here.`);
+            }
+        }
+
+        // --- UI Update Functions ---
+        function updateUI() {
+            if (app.user) {
+                // --- User is logged in ---
+                userInfoDiv.style.display = 'flex'; // Show user info and logout
+                authButtonsDiv.style.display = 'none'; // Hide login/signup buttons
+                userEmailSpan.textContent = app.user.email;
+                userTierBadge.textContent = tierConfig[app.tier].name;
+                
+                // Show/hide sections based on login and verification status
+                civicSection.style.display = 'block'; // Civic steps are always visible
+                if (isCivicVerified()) {
+                    miningSection.style.display = 'block'; // Show mining only if verified
+                } else {
+                    miningSection.style.display = 'none';
+                }
+                upgradeSection.style.display = 'block'; // Upgrade section is always visible
+                referralSection.style.display = 'block'; // Referral section visible when logged in
+                
+                // Update civic steps display based on saved state
+                Object.keys(app.civicSteps).forEach(step => {
+                    const btn = document.querySelector(`.verify-btn[data-step="${step}"]`);
+                    if (btn) {
+                        if (app.civicSteps[step]) {
+                            btn.textContent = '✅ Verified';
+                            btn.disabled = true;
+                            btn.classList.add('verified');
+                        } else {
+                            btn.textContent = '✅ I\'ve Completed This';
+                            btn.disabled = false;
+                            btn.classList.remove('verified');
+                        }
+                    }
+                });
+                
+                // Update referral information display
+                referralCodeDisplayInput.value = app.referralCode || 'N/A';
+                referralLinkDisplayInput.value = app.referralCode ? `${window.location.origin}?ref=${app.referralCode}` : 'N/A';
+                totalReferralsDisplaySpan.textContent = app.referrals;
+                referralBonusEarnedSpan.textContent = app.referralBonusEarned.toFixed(2); // Display bonus with 2 decimal places
+                
+            } else {
+                // --- User is logged out ---
+                userInfoDiv.style.display = 'none'; // Hide user info and logout
+                authButtonsDiv.style.display = 'flex'; // Show login/signup buttons
+                
+                // Adjust section visibility for logged-out users
+                civicSection.style.display = 'block'; // Allow viewing civic steps
+                miningSection.style.display = 'none'; // Hide mining
+                upgradeSection.style.display = 'block'; // Allow viewing upgrades
+                referralSection.style.display = 'none'; // Hide referrals
+                civicCompleteDiv.style.display = 'none'; // Hide completion message
+            }
+            
+            // Update balances and current tier display (visible to all logged-in users)
+            teosBalanceSpan.textContent = app.balances.teos.toLocaleString();
+            tutBalanceSpan.textContent = app.balances.tut.toLocaleString();
+            ertBalanceSpan.textContent = app.balances.ert.toLocaleString();
+            currentTierSpan.textContent = tierConfig[app.tier].name; // Display tier name
+            
+            // Update mining button state and timer (important for showing correct status)
+            updateMiningButtonState();
+        }
+
+        // Helper to check if all civic steps are completed
+        function isCivicVerified() {
+            return Object.values(app.civicSteps).every(v => v);
+        }
+
+        // Update the displayed daily mining rewards based on current tier
+        function updateRewardDisplay() {
+            const config = tierConfig[app.tier];
+            teosRewardSpan.textContent = config.teos;
+            tutRewardSpan.textContent = config.tut;
+            ertRewardSpan.textContent = config.ert;
+        }
+
+        // Animate the numbers in the hero stats section
+        function animateHeroStats() {
+            const statsToAnimate = [
+                { elementId: 'total-users', targetValue: 12847 },
+                { elementId: 'total-mined', targetValue: 2400000 }, // Represents 2.4M
+                { elementId: 'total-referrals', targetValue: 3291 }
+            ];
+
+            statsToAnimate.forEach(({ elementId, targetValue }) => {
+                const element = document.getElementById(elementId);
+                if (!element) return;
+
+                const duration = 1500; // Animation duration in milliseconds
+                // Calculate increment step for smooth animation
+                const increment = targetValue / (duration / 16); // ~60 frames per second calculation
+
+                let currentValue = 0;
+                let count = 0;
+                
+                const interval = setInterval(() => {
+                    count++;
+                    let step = Math.floor(increment * count);
+                    // Ensure we don't exceed the target value
+                    if (step > targetValue) {
+                        step = targetValue;
+                    }
+                    currentValue = step;
+
+                    // Format the number with commas for better readability
+                    element.textContent = currentValue.toLocaleString();
+
+                    // Stop the animation when the target value is reached
+                    if (currentValue === targetValue) {
+                        clearInterval(interval);
+                    }
+                }, 16); // Update roughly 60 times per second
+            });
+        }
+
+        // --- Toast Notification System ---
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`; // Assign class for styling based on type (e.g., success, error)
+            toast.textContent = message;
+            toastContainer.appendChild(toast); // Add toast to the container
+            
+            // Remove toast automatically after a duration
+            setTimeout(() => {
+                toast.remove();
+            }, 5000); // Toast visible for 5 seconds
+        }
+
+        // --- Modal Utility ---
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none'; // Hide the modal
+        }
+
+        // --- Copy to Clipboard Utility ---
+        function copyToClipboard(text) {
+            if (!text) return; // Do nothing if no text is provided
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied to clipboard!', 'success');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                showToast('Could not copy text.', 'error');
+            });
+        }
+
+        // Handler for generic copy buttons
+        function handleCopy(e) {
+            const textToCopy = e.target.dataset.copy; // Get text from data-copy attribute
+            if (textToCopy) {
+                copyToClipboard(textToCopy);
+            }
+        }
     </script>
 </body>
 </html>
+ 
