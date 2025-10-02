@@ -106,12 +106,6 @@
             color: var(--primary-color);
         }
 
-        .logo-img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-
         .nav {
             display: flex;
             align-items: center;
@@ -162,6 +156,79 @@
 
         .btn-secondary:hover {
             border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Token dashboard */
+        .token-dashboard {
+            margin: 40px auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 24px 18px;
+        }
+
+        .token-dashboard h2 {
+            margin-bottom: 12px;
+            color: var(--primary-color);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .dash-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .dash-btns a {
+            display: inline-block;
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+
+        .dash-btns a:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .token-table {
+            width: 100%;
+            color: var(--text-light);
+            border-collapse: collapse;
+        }
+
+        .token-table thead {
+            background: rgba(255, 215, 0, 0.08);
+        }
+
+        .token-table th,
+        .token-table td {
+            padding: 10px 6px;
+            text-align: left;
+        }
+
+        .token-table th {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .token-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .token-table td a {
+            color: #6bc8ff;
+            text-decoration: underline;
+        }
+
+        .token-table td a:hover {
             color: var(--primary-color);
         }
 
@@ -342,6 +409,14 @@
             font-weight: 700;
             margin-bottom: 20px;
             transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .mine-icon {
+            font-size: 1.6rem;
         }
 
         .mine-btn:hover:not(:disabled) {
@@ -631,12 +706,13 @@
             padding: 15px 20px;
             border-radius: 8px;
             margin-bottom: 10px;
-            border-left: 4px solid var(--primary-color); /* Default color */
+            border-left: 4px solid var(--primary-color);
             color: var(--text-light);
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             animation: slideIn 0.3s ease-out forwards;
             opacity: 0;
         }
+
         .toast.success { border-left-color: var(--success); }
         .toast.error { border-left-color: var(--error); }
         .toast.info { border-left-color: var(--info); }
@@ -666,6 +742,11 @@
             
             .tier-card.featured {
                 transform: scale(1);
+            }
+
+            .dash-btns {
+                flex-direction: column;
+                align-items: stretch;
             }
         }
     </style>
@@ -704,6 +785,48 @@
 
     <!-- Main Content -->
     <main class="main">
+        <!-- Token Dashboard Section -->
+        <section class="token-dashboard container">
+            <h2>TEOS Egypt Tokens</h2>
+            <div class="dash-btns">
+                <a target="_blank" href="https://teosegypt.com">Official Site</a>
+                <a target="_blank" href="https://teosegypt.token">TEOS Token Hub</a>
+                <a target="_blank" href="https://nilex.teosegypt.com/">NileX Portal</a>
+                <a target="_blank" href="https://app.dexlab.space/swap?pay=DHJkzU4yVpBMtDGs78hmw5KSYvfpQ2Jfqd8j7y8fSZ9m&receive=AhXBUQmbhv9dNoZCiMYmXF4Gyi1cjQthWHFhTL2CJaSo">Swap on DexLab</a>
+                <a target="_blank" href="https://solscan.io/token/DHJkzU4yVpBMtDGs78hmw5KSYvfpQ2Jfqd8j7y8fSZ9m">TEOS on Solscan</a>
+            </div>
+            <table class="token-table">
+                <thead>
+                    <tr>
+                        <th style="width:120px;">Token</th>
+                        <th>Mint Address</th>
+                        <th>Holders</th>
+                        <th>View on Solscan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🪙 TEOS</td>
+                        <td id="mint-teos">DHJkzU4yVpBMtDGs78hmw5KSYvfpQ2Jfqd8j7y8fSZ9m</td>
+                        <td id="holders-teos">-</td>
+                        <td><a target="_blank" href="https://solscan.io/token/DHJkzU4yVpBMtDGs78hmw5KSYvfpQ2Jfqd8j7y8fSZ9m">Solscan</a></td>
+                    </tr>
+                    <tr>
+                        <td>👑 TUT</td>
+                        <td id="mint-tut">AhXBUQmbhv9dNoZCiMYmXF4Gyi1cjQthWHFhTL2CJaSo</td>
+                        <td id="holders-tut">-</td>
+                        <td><a target="_blank" href="https://solscan.io/token/AhXBUQmbhv9dNoZCiMYmXF4Gyi1cjQthWHFhTL2CJaSo">Solscan</a></td>
+                    </tr>
+                    <tr>
+                        <td>🇪🇬 ERT</td>
+                        <td id="mint-ert">Gvce3ukeWYDprBeVtYrqUVdgMcRGADWSkX5vCKMQG3b5</td>
+                        <td id="holders-ert">-</td>
+                        <td><a target="_blank" href="https://solscan.io/token/Gvce3ukeWYDprBeVtYrqUVdgMcRGADWSkX5vCKMQG3b5">Solscan</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
         <!-- Hero Section -->
         <section class="hero">
             <div class="container">
@@ -997,7 +1120,7 @@
         </div>
 
         <!-- Referral Section -->
-        <section id="referral-section" class="referral-section">
+        <section id="referral-section" class="referral-section" style="display: none;">
             <div class="container">
                 <h2 class="section-title">🤝 Referral Program</h2>
                 <p class="section-subtitle">Invite friends and earn +5% bonus on their mining rewards!</p>
@@ -1087,26 +1210,25 @@
     <script>
         // --- App State ---
         const app = {
-            user: null, // Stores user object like { email: 'user@example.com' }
-            tier: 'free', // Default tier: 'free', 'basic', 'pro'
+            user: null,
+            tier: 'free',
             balances: {
                 teos: 0,
                 tut: 0,
                 ert: 0
             },
-            civicSteps: { // Tracks completion of civic verification steps
+            civicSteps: {
                 petition_signed: false,
                 telegram_joined: false,
                 facebook_followed: false,
                 x_followed: false
             },
-            lastMine: null, // Timestamp of the last successful mining operation
-            referralCode: null, // The user's unique referral code
-            referrals: 0, // Number of people this user has successfully referred
-            referralBonusEarned: 0 // Total bonus tokens earned from referrals
+            lastMine: null,
+            referralCode: null,
+            referrals: 0,
+            referralBonusEarned: 0
         };
 
-        // --- Tier Configurations ---
         const tierConfig = {
             free: { name: 'Free', price: 0, teos: 12, tut: 6, ert: 3 },
             basic: { name: 'Basic', price: 5, teos: 24, tut: 12, ert: 6 },
@@ -1156,132 +1278,101 @@
         const referralBonusEarnedSpan = document.getElementById('referral-bonus-earned');
         const toastContainer = document.getElementById('toast-container');
 
-        // --- Initialization ---
+        let miningCountdownInterval = null;
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Hide loading screen after a short delay
             setTimeout(() => {
                 loadingScreen.style.display = 'none';
             }, 1500);
 
-            // Load user data from localStorage
             loadUserData();
-            
-            // Initialize event listeners
             initEventListeners();
-            
-            // Generate referral code if not already set (e.g., from URL or previous session)
+
             if (!app.referralCode) {
                 app.referralCode = generateReferralCode();
             }
-            
-            // Update UI based on loaded state
+
             updateUI();
-            
-            // Check URL for referral code on initial load
             checkReferralFromURL();
-            
-            // Animate stats on hero section (optional)
             animateHeroStats();
-
-            // Set initial reward display based on default tier
             updateRewardDisplay();
-
-            // Initialize mining button state (checks cooldown, verification, etc.)
             updateMiningButtonState();
+            updateAllTokenStats();
+            setInterval(updateAllTokenStats, 360 * 1000);
         });
 
-        // --- Event Listeners Setup ---
         function initEventListeners() {
-            // Header buttons
             loginBtn.addEventListener('click', () => showAuthModal('login'));
             signupBtn.addEventListener('click', () => showAuthModal('signup'));
             logoutBtn.addEventListener('click', logout);
-            
-            // Auth modal controls
+
             document.getElementById('close-auth-modal').addEventListener('click', () => closeModal('auth-modal'));
             authForm.addEventListener('submit', handleAuth);
             authSwitchLink.addEventListener('click', switchAuthMode);
-            
-            // Civic verification buttons
+
             document.querySelectorAll('.verify-btn').forEach(btn => {
                 btn.addEventListener('click', handleCivicVerification);
             });
-            
-            // Mining button
+
             mineBtn.addEventListener('click', mineTokens);
-            
-            // Tier upgrade buttons
+
             document.querySelectorAll('.upgrade-btn').forEach(btn => {
                 btn.addEventListener('click', showPaymentModal);
             });
-            
-            // Payment modal controls
+
             document.getElementById('close-payment-modal').addEventListener('click', () => closeModal('payment-modal'));
             paymentForm.addEventListener('submit', handlePayment);
-            
-            // General copy buttons (e.g., in payment modal)
+
             document.querySelectorAll('.copy-btn').forEach(btn => {
                 btn.addEventListener('click', handleCopy);
             });
-            
-            // Specific referral copy buttons
+
             document.getElementById('copy-referral-code').addEventListener('click', () => copyToClipboard(app.referralCode));
             document.getElementById('copy-referral-link').addEventListener('click', () => copyToClipboard(window.location.origin + '?ref=' + app.referralCode));
         }
 
-        // --- Local Storage for Data Persistence ---
         function saveUserData() {
-            // Save the current state of the app to localStorage
             localStorage.setItem('teosEgyptAppData', JSON.stringify(app));
         }
 
         function loadUserData() {
-            // Load data from localStorage
             const savedData = localStorage.getItem('teosEgyptAppData');
             if (savedData) {
                 const loadedApp = JSON.parse(savedData);
-                // Merge loaded data into the current app state, ensuring all properties exist
                 Object.assign(app, loadedApp);
-                
-                // Ensure nested objects and properties are correctly loaded or reset to defaults if missing
                 app.civicSteps = loadedApp.civicSteps || { petition_signed: false, telegram_joined: false, facebook_followed: false, x_followed: false };
                 app.balances = loadedApp.balances || { teos: 0, tut: 0, ert: 0 };
                 app.lastMine = loadedApp.lastMine || null;
                 app.referralCode = loadedApp.referralCode || null;
                 app.referrals = loadedApp.referrals || 0;
                 app.referralBonusEarned = loadedApp.referralBonusEarned || 0;
-                
-                // Ensure tier is set, default to 'free' if not found
                 if (!app.tier || !tierConfig[app.tier]) {
                     app.tier = 'free';
                 }
             }
         }
 
-        // --- Authentication Flow ---
         function showAuthModal(mode) {
-            authModal.style.display = 'flex'; // Use flex to center the modal content
-            
+            authModal.style.display = 'flex';
             if (mode === 'signup') {
                 authModalTitle.textContent = 'Create Your Account';
                 authSubmitBtn.textContent = 'Sign Up';
                 authSwitchText.textContent = 'Already have an account?';
                 authSwitchLink.textContent = 'Sign in here';
-                referralGroup.style.display = 'block'; // Show referral input for signup
-                referralCodeInput.required = false; // Referral is optional
-            } else { // login mode
+                referralGroup.style.display = 'block';
+                referralCodeInput.required = false;
+            } else {
                 authModalTitle.textContent = 'Welcome Back';
                 authSubmitBtn.textContent = 'Sign In';
                 authSwitchText.textContent = "Don't have an account?";
                 authSwitchLink.textContent = 'Sign up here';
-                referralGroup.style.display = 'none'; // Hide referral input for login
+                referralGroup.style.display = 'none';
                 referralCodeInput.required = false;
             }
         }
 
         function switchAuthMode(e) {
             e.preventDefault();
-            // Toggle between login and signup views in the modal
             const isLoginView = authSubmitBtn.textContent === 'Sign In';
             showAuthModal(isLoginView ? 'signup' : 'login');
         }
@@ -1290,96 +1381,70 @@
             e.preventDefault();
             const email = emailInput.value.trim();
             const password = passwordInput.value;
-            const referralCodeFromInput = referralCodeInput.value.trim(); // Referral code entered during signup
+            const referralCodeFromInput = referralCodeInput.value.trim();
             
             if (!email || !password) {
                 showToast('Please fill in both email and password.', 'error');
                 return;
             }
 
-            // --- Simulate Authentication/Registration ---
-            // In a real application, this logic would interact with a backend API.
-            
             if (authSubmitBtn.textContent === 'Sign In') {
-                // --- Sign In Logic ---
-                app.user = { email: email }; // Simulate successful login
+                app.user = { email };
                 showToast(`Welcome back, ${email}!`, 'success');
-                
-                // If a referral code was provided during *signup*, it would have been processed then.
-                // No specific action needed here for login based on referral code input.
-
-            } else { // Sign Up
-                // --- Sign Up Logic ---
-                app.user = { email: email }; // Simulate successful registration
-
-                // If a referral code was provided during signup:
+            } else {
+                app.user = { email };
                 if (referralCodeFromInput) {
-                    // This simulates the user being referred by someone.
-                    // In a real backend, you'd link this user to the referrer and credit the referrer.
-                    // For this frontend demo, we just acknowledge it.
                     showToast(`Account created. You were referred by code: ${referralCodeFromInput}.`, 'info');
-                    // Note: This does NOT increment `app.referrals` for the *current user* as they haven't referred anyone yet.
-                    // The `app.referralCode` is *this user's* code to give out.
                 }
-                
-                // Ensure a referral code is generated for this new user if they don't have one already
                 if (!app.referralCode) {
                     app.referralCode = generateReferralCode();
                 }
-
                 showToast(`Account created for ${email}!`, 'success');
             }
-            
-            saveUserData(); // Save the updated app state
-            updateUI();   // Refresh the UI to reflect login status
-            closeModal('auth-modal'); // Close the authentication modal
-            authForm.reset(); // Clear the form fields
+
+            saveUserData();
+            updateUI();
+            closeModal('auth-modal');
+            authForm.reset();
         }
 
         function logout() {
-            // Reset user-specific data to logged-out state
             app.user = null;
-            app.tier = 'free'; // Reset tier to default on logout for demo simplicity
+            app.tier = 'free';
             app.balances = { teos: 0, tut: 0, ert: 0 };
             app.civicSteps = { petition_signed: false, telegram_joined: false, facebook_followed: false, x_followed: false };
             app.lastMine = null;
-            // Optionally reset referral stats on logout, or keep them for potential re-login.
-            // For this demo, let's keep referral code but reset count and bonus earned.
             app.referrals = 0;
             app.referralBonusEarned = 0;
-            
-            saveUserData(); // Save the reset state
-            updateUI();   // Refresh UI
+            if (miningCountdownInterval) {
+                clearInterval(miningCountdownInterval);
+                miningCountdownInterval = null;
+            }
+            saveUserData();
+            updateUI();
             showToast('Logged out successfully', 'info');
         }
 
-        // --- Civic Verification Logic ---
         function handleCivicVerification(e) {
-            const step = e.target.dataset.step; // Get the step name from the button's data attribute
-            
-            // Mark the step as complete in the app state
+            const step = e.target.dataset.step;
             app.civicSteps[step] = true;
-            saveUserData(); // Persist the change
-            
-            // Update the button's appearance and state
+            saveUserData();
+
             e.target.textContent = '✅ Verified';
             e.target.disabled = true;
-            e.target.classList.add('verified'); // Add class for potential styling
-            
-            // Check if all civic steps are now completed
+            e.target.classList.add('verified');
+
             if (isCivicVerified()) {
-                civicCompleteDiv.style.display = 'block'; // Show completion message
+                civicCompleteDiv.style.display = 'block';
                 showToast('Civic verification complete! You can now mine tokens!', 'success');
             } else {
                 showToast(`Step "${step.replace('_', ' ')}" completed.`, 'success');
             }
-            
-            updateUI(); // Refresh UI to potentially enable mining section
+
+            updateUI();
         }
 
-        // --- Mining Functionality ---
         function mineTokens() {
-            // Ensure user is logged in and verified
             if (!app.user) {
                 showToast('Please log in to mine tokens.', 'warning');
                 return;
@@ -1391,8 +1456,7 @@
 
             const now = Date.now();
             const twentyFourHoursInMillis = 24 * 60 * 60 * 1000;
-            
-            // Check if the 24-hour cooldown is still active
+
             if (app.lastMine && (now - app.lastMine < twentyFourHoursInMillis)) {
                 const timeLeft = twentyFourHoursInMillis - (now - app.lastMine);
                 const hours = Math.floor(timeLeft / (1000 * 60 * 60));
@@ -1400,104 +1464,117 @@
                 showToast(`Please wait ${hours}h ${minutes}m before your next mine.`, 'warning');
                 return;
             }
-            
-            // Calculate rewards based on current tier and referrals
+
             const config = tierConfig[app.tier];
             let baseTeosReward = config.teos;
             let bonusTeosReward = 0;
 
-            // Apply referral bonus: +5% of base TEOS reward per active referral
             if (app.referrals > 0) {
-                // Example bonus calculation: 5% per referral, capped at 50% total bonus
-                const bonusPercentage = Math.min(app.referrals * 5, 50); // Max 50% bonus for simplicity
+                const bonusPercentage = Math.min(app.referrals * 5, 50);
                 bonusTeosReward = Math.floor(baseTeosReward * (bonusPercentage / 100));
-                // Track total bonus earned for display
-                app.referralBonusEarned += bonusTeosReward; 
+                app.referralBonusEarned += bonusTeosReward;
             }
-            
             const totalTeosReward = baseTeosReward + bonusTeosReward;
 
-            // Update balances
             app.balances.teos += totalTeosReward;
             app.balances.tut += config.tut;
             app.balances.ert += config.ert;
-            app.lastMine = now; // Record current time as the last mine time
-            
-            saveUserData(); // Save the updated state
-            updateUI();   // Refresh the UI to show new balances
-            
+            app.lastMine = now;
+
+            saveUserData();
+            updateUI();
+
             showToast(`Successfully mined ${totalTeosReward} TEOS, ${config.tut} TUT, ${config.ert} ERT!`, 'success');
-            
-            // Update the mining button and its cooldown timer
             updateMiningButtonState();
         }
 
+        function setMineButtonLabel(label) {
+            const labelSpan = mineBtn ? mineBtn.querySelector('.mine-text') : null;
+            if (labelSpan) {
+                labelSpan.textContent = label;
+            } else if (mineBtn) {
+                mineBtn.textContent = label;
+            }
+        }
+
         function updateMiningButtonState() {
-            const now = Date.now();
+            if (miningCountdownInterval) {
+                clearInterval(miningCountdownInterval);
+                miningCountdownInterval = null;
+            }
+
             const twentyFourHoursInMillis = 24 * 60 * 60 * 1000;
-            
-            // If not logged in or not verified, mining is disabled
-            if (!app.user || !isCivicVerified()) {
+
+            if (!app.user) {
                 mineBtn.disabled = true;
-                mineBtn.textContent = 'Complete Verification to Mine';
+                setMineButtonLabel('Log In to Mine');
                 nextMineTimeSpan.textContent = 'N/A';
                 return;
             }
 
-            // Check if mining is on cooldown
+            if (!isCivicVerified()) {
+                mineBtn.disabled = true;
+                setMineButtonLabel('Complete Verification to Mine');
+                nextMineTimeSpan.textContent = 'N/A';
+                return;
+            }
+
+            const now = Date.now();
             if (app.lastMine && (now - app.lastMine < twentyFourHoursInMillis)) {
                 mineBtn.disabled = true;
-                mineBtn.textContent = 'Mining Available in 24h';
-                updateNextMineCountdown(); // Start the countdown timer
+                setMineButtonLabel('Mining Cooldown');
+                startMiningCountdown();
             } else {
-                // Ready to mine
                 mineBtn.disabled = false;
-                mineBtn.textContent = 'Mine Tokens';
+                setMineButtonLabel('Mine Tokens');
                 nextMineTimeSpan.textContent = 'Ready!';
             }
         }
 
-        function updateNextMineCountdown() {
-            // Use an interval to update the countdown every second
-            const interval = setInterval(() => {
-                const now = Date.now();
-                const twentyFourHoursInMillis = 24 * 60 * 60 * 1000;
-                // Calculate remaining time
-                const timeLeft = twentyFourHoursInMillis - (now - app.lastMine);
+        function startMiningCountdown() {
+            if (!app.lastMine) {
+                nextMineTimeSpan.textContent = 'Ready!';
+                return;
+            }
 
-                if (timeLeft <= 0) {
-                    // Cooldown finished
-                    clearInterval(interval); // Stop the timer
+            const twentyFourHoursInMillis = 24 * 60 * 60 * 1000;
+
+            const updateCountdown = () => {
+                const now = Date.now();
+                const elapsed = now - app.lastMine;
+                const remaining = twentyFourHoursInMillis - elapsed;
+
+                if (remaining <= 0) {
+                    clearInterval(miningCountdownInterval);
+                    miningCountdownInterval = null;
                     mineBtn.disabled = false;
-                    mineBtn.textContent = 'Mine Tokens';
+                    setMineButtonLabel('Mine Tokens');
                     nextMineTimeSpan.textContent = 'Ready!';
                     return;
                 }
-                
-                // Format remaining time into hours, minutes, seconds
-                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                
+
+                const hours = Math.floor(remaining / (1000 * 60 * 60));
+                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+
                 nextMineTimeSpan.textContent = `${hours}h ${minutes}m ${seconds}s`;
-            }, 1000); // Update every second
+            };
+
+            updateCountdown();
+            miningCountdownInterval = setInterval(updateCountdown, 1000);
         }
 
-        // --- Tier Upgrade Functionality ---
         function showPaymentModal(e) {
-            const tier = e.target.dataset.tier; // Get the target tier from the button's data attribute
+            const tier = e.target.dataset.tier;
             const config = tierConfig[tier];
-            
-            // Populate payment modal fields
             paymentTierInput.value = `${config.name} Tier`;
             paymentAmountInput.value = `$${config.price}/month`;
-            
-            paymentModal.style.display = 'flex'; // Show the payment modal
+            paymentModal.style.display = 'flex';
         }
 
         function handlePayment(e) {
             e.preventDefault();
-            const selectedTierName = paymentTierInput.value.replace(' Tier', '').toLowerCase(); // Get tier name from input
+            const selectedTierName = paymentTierInput.value.replace(' Tier', '').toLowerCase();
             const currency = document.getElementById('payment-currency').value;
             const transactionHash = document.getElementById('transaction-hash').value.trim();
             
@@ -1506,134 +1583,103 @@
                 return;
             }
 
-            // --- Simulate Payment Processing ---
-            // In a real app, this would involve backend verification of the transaction hash.
             setTimeout(() => {
-                app.tier = selectedTierName; // Update the user's tier
-                // For demo, reset balances and mining cooldown on tier change
-                app.balances = { teos: 0, tut: 0, ert: 0 }; 
-                app.lastMine = null; 
-                
-                saveUserData(); // Save the updated tier and reset state
-                updateUI();   // Refresh UI
-                closeModal('payment-modal'); // Close the payment modal
+                app.tier = selectedTierName;
+                app.balances = { teos: 0, tut: 0, ert: 0 };
+                app.lastMine = null;
+
+                saveUserData();
+                updateUI();
+                closeModal('payment-modal');
                 showToast(`Payment successful! Your tier is now "${tierConfig[app.tier].name}".`, 'success');
-                
-                paymentForm.reset(); // Clear the payment form
-            }, 2000); // Simulate a 2-second processing time
+                paymentForm.reset();
+            }, 2000);
         }
 
-        // --- Referral System Logic ---
         function generateReferralCode() {
-            // Generates a simple random alphanumeric code (e.g., "ABC123")
             return Math.random().toString(36).substring(2, 8).toUpperCase();
         }
 
         function checkReferralFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
-            const referrerCode = urlParams.get('ref'); // Get referral code from URL query parameter 'ref'
-            
+            const referrerCode = urlParams.get('ref');
             if (referrerCode && referrerCode !== app.referralCode) {
-                // If a referral code is found in the URL and it's not the user's own code:
-                referralCodeInput.value = referrerCode; // Pre-fill the referral input in the signup form
+                referralCodeInput.value = referrerCode;
                 showToast(`You were referred by code: ${referrerCode}`, 'info');
-                // This code will be used when the user signs up.
             }
         }
 
-        // This function is intended to be called when a user *signs up* using a referral code.
-        // It's a placeholder for backend logic that would credit the referrer.
-        function processReferralCodeEntry(code) {
-            if (code && code !== app.referralCode) {
-                // Simulate backend interaction: if user signed up with `code`,
-                // the backend would increment `app.referrals` for the user who owns `code`.
-                // Since we don't have backend access here, this part is conceptual.
-                console.log(`User signed up with referral code: ${code}. Logic to credit referrer would go here.`);
-            }
-        }
-
-        // --- UI Update Functions ---
         function updateUI() {
-            if (app.user) {
-                // --- User is logged in ---
-                userInfoDiv.style.display = 'flex'; // Show user info and logout
-                authButtonsDiv.style.display = 'none'; // Hide login/signup buttons
+            const loggedIn = Boolean(app.user);
+
+            if (loggedIn) {
+                userInfoDiv.style.display = 'flex';
+                authButtonsDiv.style.display = 'none';
                 userEmailSpan.textContent = app.user.email;
                 userTierBadge.textContent = tierConfig[app.tier].name;
-                
-                // Show/hide sections based on login and verification status
-                civicSection.style.display = 'block'; // Civic steps are always visible
-                if (isCivicVerified()) {
-                    miningSection.style.display = 'block'; // Show mining only if verified
-                } else {
-                    miningSection.style.display = 'none';
-                }
-                upgradeSection.style.display = 'block'; // Upgrade section is always visible
-                referralSection.style.display = 'block'; // Referral section visible when logged in
-                
-                // Update civic steps display based on saved state
-                Object.keys(app.civicSteps).forEach(step => {
-                    const btn = document.querySelector(`.verify-btn[data-step="${step}"]`);
-                    if (btn) {
-                        if (app.civicSteps[step]) {
-                            btn.textContent = '✅ Verified';
-                            btn.disabled = true;
-                            btn.classList.add('verified');
-                        } else {
-                            btn.textContent = '✅ I\'ve Completed This';
-                            btn.disabled = false;
-                            btn.classList.remove('verified');
-                        }
-                    }
-                });
-                
-                // Update referral information display
-                referralCodeDisplayInput.value = app.referralCode || 'N/A';
-                referralLinkDisplayInput.value = app.referralCode ? `${window.location.origin}?ref=${app.referralCode}` : 'N/A';
-                totalReferralsDisplaySpan.textContent = app.referrals;
-                referralBonusEarnedSpan.textContent = app.referralBonusEarned.toFixed(2); // Display bonus with 2 decimal places
-                
+
+                civicSection.style.display = 'block';
+                miningSection.style.display = isCivicVerified() ? 'block' : 'none';
+                referralSection.style.display = 'block';
             } else {
-                // --- User is logged out ---
-                userInfoDiv.style.display = 'none'; // Hide user info and logout
-                authButtonsDiv.style.display = 'flex'; // Show login/signup buttons
-                
-                // Adjust section visibility for logged-out users
-                civicSection.style.display = 'block'; // Allow viewing civic steps
-                miningSection.style.display = 'none'; // Hide mining
-                upgradeSection.style.display = 'block'; // Allow viewing upgrades
-                referralSection.style.display = 'none'; // Hide referrals
-                civicCompleteDiv.style.display = 'none'; // Hide completion message
+                userInfoDiv.style.display = 'none';
+                authButtonsDiv.style.display = 'flex';
+                civicSection.style.display = 'block';
+                miningSection.style.display = 'none';
+                referralSection.style.display = 'none';
+                civicCompleteDiv.style.display = 'none';
             }
-            
-            // Update balances and current tier display (visible to all logged-in users)
+
+            Object.keys(app.civicSteps).forEach(step => {
+                const btn = document.querySelector(`.verify-btn[data-step="${step}"]`);
+                if (btn) {
+                    if (app.civicSteps[step]) {
+                        btn.textContent = '✅ Verified';
+                        btn.disabled = true;
+                        btn.classList.add('verified');
+                    } else {
+                        btn.textContent = '✅ I\'ve Completed This';
+                        btn.disabled = false;
+                        btn.classList.remove('verified');
+                    }
+                }
+            });
+
+            civicCompleteDiv.style.display = loggedIn && isCivicVerified() ? 'block' : 'none';
+
             teosBalanceSpan.textContent = app.balances.teos.toLocaleString();
             tutBalanceSpan.textContent = app.balances.tut.toLocaleString();
             ertBalanceSpan.textContent = app.balances.ert.toLocaleString();
-            currentTierSpan.textContent = tierConfig[app.tier].name; // Display tier name
-            
-            // Update mining button state and timer (important for showing correct status)
+            currentTierSpan.textContent = tierConfig[app.tier].name;
+
+            referralCodeDisplayInput.value = app.referralCode || 'N/A';
+            referralLinkDisplayInput.value = app.referralCode ? `${window.location.origin}?ref=${app.referralCode}` : 'N/A';
+            totalReferralsDisplaySpan.textContent = app.referrals;
+            referralBonusEarnedSpan.textContent = app.referralBonusEarned.toFixed(2);
+
+            updateRewardDisplay();
             updateMiningButtonState();
         }
 
-        // Helper to check if all civic steps are completed
         function isCivicVerified() {
             return Object.values(app.civicSteps).every(v => v);
         }
 
-        // Update the displayed daily mining rewards based on current tier
         function updateRewardDisplay() {
             const config = tierConfig[app.tier];
             teosRewardSpan.textContent = config.teos;
             tutRewardSpan.textContent = config.tut;
             ertRewardSpan.textContent = config.ert;
+            const heroTierSpan = document.getElementById('current-tier');
+            if (heroTierSpan) {
+                heroTierSpan.textContent = config.name;
+            }
         }
 
-        // Animate the numbers in the hero stats section
         function animateHeroStats() {
             const statsToAnimate = [
                 { elementId: 'total-users', targetValue: 12847 },
-                { elementId: 'total-mined', targetValue: 2400000 }, // Represents 2.4M
+                { elementId: 'total-mined', targetValue: 2400000 },
                 { elementId: 'total-referrals', targetValue: 3291 }
             ];
 
@@ -1641,9 +1687,8 @@
                 const element = document.getElementById(elementId);
                 if (!element) return;
 
-                const duration = 1500; // Animation duration in milliseconds
-                // Calculate increment step for smooth animation
-                const increment = targetValue / (duration / 16); // ~60 frames per second calculation
+                const duration = 1500;
+                const increment = targetValue / (duration / 16);
 
                 let currentValue = 0;
                 let count = 0;
@@ -1651,44 +1696,35 @@
                 const interval = setInterval(() => {
                     count++;
                     let step = Math.floor(increment * count);
-                    // Ensure we don't exceed the target value
                     if (step > targetValue) {
                         step = targetValue;
                     }
                     currentValue = step;
-
-                    // Format the number with commas for better readability
                     element.textContent = currentValue.toLocaleString();
 
-                    // Stop the animation when the target value is reached
                     if (currentValue === targetValue) {
                         clearInterval(interval);
                     }
-                }, 16); // Update roughly 60 times per second
+                }, 16);
             });
         }
 
-        // --- Toast Notification System ---
         function showToast(message, type = 'info') {
             const toast = document.createElement('div');
-            toast.className = `toast ${type}`; // Assign class for styling based on type (e.g., success, error)
+            toast.className = `toast ${type}`;
             toast.textContent = message;
-            toastContainer.appendChild(toast); // Add toast to the container
-            
-            // Remove toast automatically after a duration
+            toastContainer.appendChild(toast);
             setTimeout(() => {
                 toast.remove();
-            }, 5000); // Toast visible for 5 seconds
+            }, 5000);
         }
 
-        // --- Modal Utility ---
         function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none'; // Hide the modal
+            document.getElementById(modalId).style.display = 'none';
         }
 
-        // --- Copy to Clipboard Utility ---
         function copyToClipboard(text) {
-            if (!text) return; // Do nothing if no text is provided
+            if (!text) return;
             navigator.clipboard.writeText(text).then(() => {
                 showToast('Copied to clipboard!', 'success');
             }).catch(err => {
@@ -1697,14 +1733,40 @@
             });
         }
 
-        // Handler for generic copy buttons
         function handleCopy(e) {
-            const textToCopy = e.target.dataset.copy; // Get text from data-copy attribute
+            const textToCopy = e.target.dataset.copy;
             if (textToCopy) {
                 copyToClipboard(textToCopy);
             }
         }
+
+        const TOKEN_ADDRESSES = [
+            { address: 'DHJkzU4yVpBMtDGs78hmw5KSYvfpQ2Jfqd8j7y8fSZ9m', elementId: 'holders-teos' },
+            { address: 'AhXBUQmbhv9dNoZCiMYmXF4Gyi1cjQthWHFhTL2CJaSo', elementId: 'holders-tut' },
+            { address: 'Gvce3ukeWYDprBeVtYrqUVdgMcRGADWSkX5vCKMQG3b5', elementId: 'holders-ert' }
+        ];
+
+        function fetchHoldersCount(token, elId) {
+            fetch(`https://public-api.solscan.io/token/holders?tokenAddress=${token}`)
+                .then(response => response.json())
+                .then(data => {
+                    const total = data && (data.total || (data.data ? data.data.length : null));
+                    const holderCell = document.getElementById(elId);
+                    if (holderCell) {
+                        holderCell.textContent = total ? Number(total).toLocaleString() : '-';
+                    }
+                })
+                .catch(() => {
+                    const holderCell = document.getElementById(elId);
+                    if (holderCell) {
+                        holderCell.textContent = 'N/A';
+                    }
+                });
+        }
+
+        function updateAllTokenStats() {
+            TOKEN_ADDRESSES.forEach(token => fetchHoldersCount(token.address, token.elementId));
+        }
     </script>
 </body>
 </html>
- 
