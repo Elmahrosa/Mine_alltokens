@@ -1,3 +1,11 @@
+# ?? Repo Standing Statement
+
+This repository is a **sovereign original** under **Elmahrosa International � TEOS Egypt**.  
+Governance is anchored in [TEOS-FORGE](https://github.com/Elmahrosa/TEOS-FORGE).  
+Commercial use requires written approval from Elmahrosa International.  
+
+?? Protected under dual license: PolyForm Noncommercial + TEOS Egypt Sovereign License (TESL).
+
 # 🪙 Mine_alltokens — TEOS Egypt Mining Portal
 
 A complete civic-powered mining application for TEOS Egypt. Contributors unlock daily token rewards by completing civic verification steps and can upgrade to Basic or Pro tiers using TEOS, SOL, or Pi.
@@ -331,3 +339,9 @@ This portal is part of TEOS Egypt's global digital legacy. Every miner, referrer
 **Made with ❤️ by the TEOS Egypt community**
 
 *Become a Verified TEOS Pioneer 🇪🇬*
+
+
+## ?? Integration Summary
+This repository is part of the **Elmahrosa Sovereign Stack**.  
+Governance is anchored in **TEOS-FORGE**, with integrations across Bankchain, ERT-LAUNCH, FPBE, and other civic modules.  
+See full details in [docs/integrations.md](https://github.com/Elmahrosa/TEOS-FORGE/blob/main/docs/integrations.md).
